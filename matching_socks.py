@@ -3,7 +3,13 @@ This code will create a list with random pairs of socks and after a shuffle the 
 sort them automatically
 """
 import random #IMPORT random to generate the random list of socks
-
+import pygame #IMPORT PYGAME for the grapchical version of the code.
+#Initialize pygame
+pygame.init()
+#size of the screen
+size = 800, 600
+#pygame clock
+clock = pygame.time.Clock()
 #available list of socks 
 socks = [
     'blue','orange','yellow',
@@ -24,28 +30,21 @@ striped_orange_list = []
 white_list = []
 black_list = []
 striped_blue_list = []
-
+#Start the screen
+screen = pygame.display.set_mode(size)
+pygame.display.set_caption("SOCK SORTING")
 amount_of_socks =   random.randint(2,len(socks)) #random amount of socks (minimum 2 pairs and a max length of socks)
-
-#for loop to select from random amount of socks random socks
-for x in range(amount_of_socks):
-    number = random.randint(0,8)
-    if socks[number] not in picked:
-        picked.append(socks[number])
-"""
-Randomly shuffle the pairs to have them in disorder
-"""
-print(picked)
-pairs = picked
-random.shuffle(picked)
-print(pairs)
+run = True
+#for GUI purposes define socks
+blue_sock = pygame.image.load('blue.png')
 
 #switch case to python
 def blue():
     blue_list.append("blue")
+    screen.blit(blue_sock, (random.randint(0,800),random.randint(0,600)))
     if blue_list not in drawer:
         drawer.append(blue_list)
-    
+
 def orange():
     orange_list.append("orange")
     if orange_list not in drawer:
@@ -66,7 +65,7 @@ def black():
     if black_list not in drawer:
         drawer.append(black_list)
     
-def white():
+def white_fu():
     white_list.append("white")
     if white_list not in drawer:
         drawer.append(white_list)
@@ -93,16 +92,42 @@ def sort(sock_list):
         'yellow':yellow,
         'red':red,
         'black':black,
-        'white':white,
+        'white':white_fu,
         'striped_orange':striped_orange,
         'striped_blue':striped_blue,
         'green':green
     }
     function = sock_dict.get(sock_list, lambda:"invalid")
     function()
-#run every item in the sort function to match them with their pairs
-for x in range(len(picked)):
-    sort(picked[x])
-    sort(pairs[x])
 
-print(drawer)
+while run:
+    for event in pygame.event.get():
+        if event.type ==pygame.QUIT:
+            run = False
+    #for loop to select from random amount of socks random socks
+    for x in range(amount_of_socks):
+        number = random.randint(0,8)
+        if socks[number] not in picked:
+            picked.append(socks[number])
+
+    #run every item in the sort function to match them with their pairs
+    question = input("sort socks?")
+    if (question == "yes"):
+        
+        print(picked)
+        pairs = picked
+        random.shuffle(picked)
+        print(pairs)
+        for x in range(len(picked)):
+            sort(picked[x])
+            sort(pairs[x])
+            pygame.display.update()
+            clock.tick(60)
+        
+        print(drawer)
+    else:
+        run = False
+
+    
+pygame.quit()
+quit()
