@@ -8,7 +8,12 @@ import os
 #Initialize pygame
 pygame.init()
 #size of the screen
-size = 1200, 900
+size = 1200, 650
+#colors RGB
+color_bred = (255,0,0)
+color_bgreen = (0,255,0)
+color_green=(0,100,0)
+color_red=(100,0,0) 
 #pygame clock
 clock = pygame.time.Clock()
 #available list of socks 
@@ -115,7 +120,35 @@ def sort(sock_list):
     }
     function = sock_dict.get(sock_list, lambda:"invalid")
     function()
-
+def intro():
+    running = True
+    while running:
+        pygame.draw.rect(screen,color_green,(150,450,100,50))
+        #pygame.draw.rect(screen,color_red,(850,450,100,50))
+        for event in pygame.event.get():
+            if event.type ==pygame.QUIT:
+                pygame.quit()
+                quit()
+        mouse = pygame.mouse.get_pos()
+        click = pygame.mouse.get_pressed()
+        #print(mouse)
+        if ((200+250 > mouse[0] >150) and (450+50 >mouse[1]>450)):
+            pygame.draw.rect(screen,color_bgreen,(250,450,200,50))
+            if(click[0] == 1):
+                print(picked)
+                pairs = picked
+                random.shuffle(picked)
+                print(pairs)
+                for x in range(len(picked)):
+                    sort(picked[x])
+                    sort(pairs[x])
+                    action = "Not none"
+                pygame.display.update()
+                clock.tick(60)
+                
+        else:
+            pygame.draw.rect(screen,color_green,(150,450,100,50))
+        pygame.display.update()
 while run:
     for event in pygame.event.get():
         if event.type ==pygame.QUIT:
@@ -125,9 +158,9 @@ while run:
         number = random.randint(0,8)
         if socks[number] not in picked:
             picked.append(socks[number])
-
+    intro()
     #run every item in the sort function to match them with their pairs
-    question = input("sort socks?")
+    """question = input("sort socks?")
     if (question == "yes"):
         
         print(picked)
@@ -142,7 +175,7 @@ while run:
         
         print(drawer)
     else:
-        run = False
+        run = False"""
 
     
 pygame.quit()
