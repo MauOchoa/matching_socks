@@ -1,6 +1,6 @@
 """ 
 This code will create a list with random pairs of socks and after a shuffle the system will 
-sort them automatically
+sort them automatically V0.6
 """
 import random #IMPORT random to generate the random list of socks
 import pygame #IMPORT PYGAME for the grapchical version of the code.
