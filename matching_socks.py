@@ -5,6 +5,7 @@ sort them automatically
 import random #IMPORT random to generate the random list of socks
 import pygame #IMPORT PYGAME for the grapchical version of the code.
 import os
+import time
 #Initialize pygame
 pygame.init()
 #size of the screen
@@ -14,6 +15,8 @@ color_bred = (255,0,0)
 color_bgreen = (0,255,0)
 color_green=(0,100,0)
 color_red=(100,0,0) 
+color_white=(255,255,255)
+color_black=(0,0,0)
 #pygame clock
 clock = pygame.time.Clock()
 #available list of socks 
@@ -36,12 +39,8 @@ striped_orange_list = []
 white_list = []
 black_list = []
 striped_blue_list = []
-#Start the screen
-screen = pygame.display.set_mode(size)
-pygame.display.set_caption("SOCK SORTING")
-amount_of_socks =   random.randint(2,len(socks)) #random amount of socks (minimum 2 pairs and a max length of socks)
-run = True
 #for GUI purposes define socks
+icon = pygame.image.load(os.path.join('images/socks.png'))
 blue_sock = pygame.image.load(os.path.join('images/blue.png'))
 orange_sock = pygame.image.load(os.path.join('images/orange.png'))
 yellow_sock = pygame.image.load(os.path.join('images/yellow.png'))
@@ -51,58 +50,66 @@ white_sock = pygame.image.load(os.path.join('images/white.png'))
 black_sock = pygame.image.load(os.path.join('images/black.png'))
 striped_blue_sock = pygame.image.load(os.path.join('images/striped_blue.png'))
 striped_orange_sock = pygame.image.load(os.path.join('images/striped_orange.png'))
+#Start the screen
+screen = pygame.display.set_mode(size)
+pygame.display.set_caption("SOCK SORTING")
+pygame.display.set_icon(icon)
+amount_of_socks =   random.randint(2,len(socks)) #random amount of socks (minimum 2 pairs and a max length of socks)
+running = True
+#Text sizes and fonts
+small_text = pygame.font.Font('freesansbold.ttf',20)
 #switch case to python
 def blue():
     blue_list.append("blue")
-    screen.blit(blue_sock, (random.randint(0,800),random.randint(0,600)))
+    screen.blit(blue_sock, (random.randint(0,800),random.randint(0,462)))
     if blue_list not in drawer:
         drawer.append(blue_list)
 
 def orange():
     orange_list.append("orange")
-    screen.blit(orange_sock, (random.randint(0,800),random.randint(0,600)))
+    screen.blit(orange_sock, (random.randint(0,800),random.randint(0,462)))
     if orange_list not in drawer:
         drawer.append(orange_list)
     
 def yellow():
     yellow_list.append("yellow")
-    screen.blit(yellow_sock, (random.randint(0,800),random.randint(0,600)))
+    screen.blit(yellow_sock, (random.randint(0,800),random.randint(0,462)))
     if yellow_list not in drawer:
         drawer.append(yellow_list)
     
 def red():
     red_list.append("red")
-    screen.blit(red_sock, (random.randint(0,800),random.randint(0,600)))
+    screen.blit(red_sock, (random.randint(0,800),random.randint(0,462)))
     if red_list not in drawer:
         drawer.append(red_list)
     
 def black():
     black_list.append("black")
-    screen.blit(black_sock, (random.randint(0,800),random.randint(0,600)))
+    screen.blit(black_sock, (random.randint(0,800),random.randint(0,462)))
     if black_list not in drawer:
         drawer.append(black_list)
     
 def white_fu():
     white_list.append("white")
-    screen.blit(white_sock, (random.randint(0,800),random.randint(0,600)))
+    screen.blit(white_sock, (random.randint(0,800),random.randint(0,462)))
     if white_list not in drawer:
         drawer.append(white_list)
     
 def striped_blue():
     striped_blue_list.append("striped blue")
-    screen.blit(striped_blue_sock, (random.randint(0,800),random.randint(0,600)))
+    screen.blit(striped_blue_sock, (random.randint(0,800),random.randint(0,462)))
     if striped_blue_list not in drawer:
         drawer.append(striped_blue_list)
     
 def striped_orange():
     striped_orange_list.append("striped orange")
-    screen.blit(striped_orange_sock, (random.randint(0,800),random.randint(0,600)))
+    screen.blit(striped_orange_sock, (random.randint(0,800),random.randint(0,462)))
     if striped_orange_list not in drawer:
         drawer.append(striped_orange_list)
     
 def green():
     green_list.append("green")
-    screen.blit(green_sock, (random.randint(0,800),random.randint(0,600)))
+    screen.blit(green_sock, (random.randint(0,800),random.randint(0,462)))#462 ensures that the socks are inside the screen
     if green_list not in drawer:
         drawer.append(green_list)
 
@@ -119,64 +126,50 @@ def sort(sock_list):
         'green':green
     }
     function = sock_dict.get(sock_list, lambda:"invalid")
+    running = False
     function()
-def intro():
-    running = True
-    while running:
-        pygame.draw.rect(screen,color_green,(150,450,100,50))
-        #pygame.draw.rect(screen,color_red,(850,450,100,50))
-        for event in pygame.event.get():
-            if event.type ==pygame.QUIT:
-                pygame.quit()
-                quit()
-        mouse = pygame.mouse.get_pos()
-        click = pygame.mouse.get_pressed()
-        #print(mouse)
-        if ((200+250 > mouse[0] >150) and (450+50 >mouse[1]>450)):
-            pygame.draw.rect(screen,color_bgreen,(250,450,200,50))
-            if(click[0] == 1):
+def button(x,y,w,h,ic,ac,status = None):
+    mouse = pygame.mouse.get_pos()                      #gets mouse position
+    click = pygame.mouse.get_pressed()                  #gets if mouse is clicking
+    if ((w+x > mouse[0] >x) and (y+h >mouse[1]>y)):     #if mouse pointer is inside the "button"
+        pygame.draw.rect(screen,ac,(x,y,w,h))           #highlight the button to see selection
+        if(click[0] == 1 and status != None):           #if left click and is from a button
+            if status == "play":                        #if is the right button
+                time.sleep(1)                           #timer to get one click only
+                screen.fill(color_black)
+                pygame.display.update()
                 print(picked)
                 pairs = picked
                 random.shuffle(picked)
                 print(pairs)
-                for x in range(len(picked)):
-                    sort(picked[x])
-                    sort(pairs[x])
-                    action = "Not none"
-                pygame.display.update()
-                clock.tick(60)
-                
-        else:
-            pygame.draw.rect(screen,color_green,(150,450,100,50))
-        pygame.display.update()
-while run:
-    for event in pygame.event.get():
-        if event.type ==pygame.QUIT:
-            run = False
-    #for loop to select from random amount of socks random socks
-    for x in range(amount_of_socks):
-        number = random.randint(0,8)
-        if socks[number] not in picked:
-            picked.append(socks[number])
-    intro()
-    #run every item in the sort function to match them with their pairs
-    """question = input("sort socks?")
-    if (question == "yes"):
-        
-        print(picked)
-        pairs = picked
-        random.shuffle(picked)
-        print(pairs)
-        for x in range(len(picked)):
-            sort(picked[x])
-            sort(pairs[x])
-            pygame.display.update()
-            clock.tick(60)
-        
-        print(drawer)
+                for element in range(len(picked)):
+                    sort(picked[element])
+                    sort(pairs[element])
     else:
-        run = False"""
-
-    
+        pygame.draw.rect(screen,ic,(x,y,w,h))
+#Run the introduction of the GUI
+def intro():
+    while running:
+        for event in pygame.event.get():
+            if event.type ==pygame.QUIT:
+                pygame.quit()
+                quit()
+        #for loop to select from random amount of socks random socks
+        for x in range(amount_of_socks):
+            number = random.randint(0,8)
+            if socks[number] not in picked:
+                picked.append(socks[number])
+        button(1000,100,100,50,color_green,color_bgreen,"play")
+        button(1000,400,100,50,color_red,color_bred,"sort")
+        pygame.display.update()
+def game_loop():
+    while True:
+        for event in pygame.event.get():
+            if event.type ==pygame.QUIT:
+                pygame.quit()
+                quit()
+        pass
+intro()
+game_loop()    
 pygame.quit()
 quit()
