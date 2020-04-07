@@ -8,6 +8,7 @@ import os     #IMPORT os so we can get the images from other folders
 import time   #IMPORT time so the buttons can run only once and not several times
 #Initialize pygame
 pygame.init()
+clock = pygame.time.Clock()
 #size of the screen
 size = 1200, 650
 #colors RGB
@@ -55,6 +56,7 @@ pygame.display.set_icon(icon)
 amount_of_socks = random.randint(2,len(socks)) #random amount of socks (minimum 2 pairs and a max length of socks)
 #Text sizes and fonts
 small_text = pygame.font.Font('freesansbold.ttf',20)
+large_text = pygame.font.Font('freesansbold.ttf',115)
 #switch case to python
 def blue():
     screen.blit(blue_sock, (random.randint(0,800),random.randint(0,462)))
@@ -111,8 +113,8 @@ def green():
        GUI_drawer.append(GUI_green_list)
 
 #generates text for buttons
-def text_objects(text,font):
-    textSurface = font.render(text, True, color_grey)
+def text_objects(text,font,color):
+    textSurface = font.render(text, True, color)
     return textSurface, textSurface.get_rect()
 
 #Dictionary to pull socks randomly
@@ -161,14 +163,16 @@ def button(x,y,w,h,ic,ac,msg,status = None):
                     pull(picked[element])
                     pull(pairs[element])
             elif(status == "sort"):
-                screen.fill(color_white)
+                time.sleep(1)
+                screen.fill(color_grey)
                 sort(0,70)
     else:
         pygame.draw.rect(screen,ic,(x,y,w,h))
-    textsurf, textrect = text_objects(msg, small_text)
+    textsurf, textrect = text_objects(msg, small_text, color_grey)
     textrect.center= ((x+(w/2)),(y+(h/2)))
     screen.blit(textsurf,textrect)
     pygame.display.update()
+    clock.tick(60)
 
 #Run the introduction of the GUI
 def intro():
@@ -179,10 +183,25 @@ def intro():
                 pygame.quit()
                 quit()
         #for loop to select from random amount of socks random socks
+        screen.fill(color_grey)
+        textsurf, textrect = text_objects("Sorting socks", large_text,color_green)
+        textrect.center= (460,300)
+        screen.blit(textsurf,textrect)
+        pygame.display.update()
+        clock.tick(60)
+        loop()
+def loop():
+    running = True
+    while running:
+        for event in pygame.event.get():
+            if event.type ==pygame.QUIT:
+                pygame.quit()
+                quit()
         button(1000,100,100,50,color_green,color_bgreen,"random","pull")
         button(1000,400,100,50,color_red,color_bred,"pair","sort")
         pygame.display.update()
-
-intro()    
+        clock.tick(60)
+intro()
+loop()    
 pygame.quit()
 quit()
