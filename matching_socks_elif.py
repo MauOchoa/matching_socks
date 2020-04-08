@@ -57,60 +57,13 @@ amount_of_socks = random.randint(2,len(socks)) #random amount of socks (minimum 
 #Text sizes and fonts
 small_text = pygame.font.Font('freesansbold.ttf',20)
 large_text = pygame.font.Font('freesansbold.ttf',115)
-#switch case to python
-def blue():
-    screen.blit(blue_sock, (random.randint(0,800),random.randint(0,462)))
-    GUI_blue_list.append(blue_sock)
-    if GUI_blue_list not in GUI_drawer:
-        GUI_drawer.append(GUI_blue_list)
 
-def orange():
-    screen.blit(orange_sock, (random.randint(0,800),random.randint(0,462)))
-    GUI_orange_list.append(orange_sock)
-    if GUI_orange_list not in GUI_drawer:
-        GUI_drawer.append(GUI_orange_list)
-    
-def yellow():
-    screen.blit(yellow_sock, (random.randint(0,800),random.randint(0,462)))
-    GUI_yellow_list.append(yellow_sock)
-    if GUI_yellow_list not in GUI_drawer:
-        GUI_drawer.append(GUI_yellow_list)
-    
-def red():
-    screen.blit(red_sock, (random.randint(0,800),random.randint(0,462)))
-    GUI_red_list.append(red_sock)
-    if GUI_red_list not in GUI_drawer:
-        GUI_drawer.append(GUI_red_list)
-    
-def black():
-    screen.blit(black_sock, (random.randint(0,800),random.randint(0,462)))
-    GUI_black_list.append(black_sock)
-    if GUI_black_list not in GUI_drawer:
-        GUI_drawer.append(GUI_black_list)
-    
-def white():
-    screen.blit(white_sock, (random.randint(0,800),random.randint(0,462)))
-    GUI_white_list.append(white_sock)
-    if GUI_white_list not in GUI_drawer:
-        GUI_drawer.append(GUI_white_list)    
-    
-def striped_blue():
-    screen.blit(striped_blue_sock, (random.randint(0,800),random.randint(0,462)))
-    GUI_striped_blue_list.append(striped_blue_sock)
-    if GUI_striped_blue_list not in GUI_drawer:
-        GUI_drawer.append(GUI_striped_blue_list)
-    
-def striped_orange():
-    screen.blit(striped_orange_sock, (random.randint(0,800),random.randint(0,462)))
-    GUI_striped_orange_list.append(striped_orange_sock)
-    if GUI_striped_orange_list not in GUI_drawer:
-        GUI_drawer.append(GUI_striped_orange_list)
-    
-def green():
-    screen.blit(green_sock, (random.randint(0,800),random.randint(0,462)))#462 ensures that the socks are inside the screen
-    GUI_green_list.append(green_sock)
-    if GUI_green_list not in GUI_drawer:
-       GUI_drawer.append(GUI_green_list)
+#switching the switchcase to a one function
+def color_sorting(sock,list_ofsock):
+    screen.blit(sock, (random.randint(0,800),random.randint(0,462)))
+    list_ofsock.append(sock)
+    if list_ofsock not in GUI_drawer:
+        GUI_drawer.append(list_ofsock)
 
 #generates text for buttons
 def text_objects(text,font,color):
@@ -119,20 +72,26 @@ def text_objects(text,font,color):
 
 #Dictionary to pull socks randomly
 def pull(sock_list):
-    sock_dict = {
-        'blue':blue,
-        'orange':orange,
-        'yellow':yellow,
-        'red':red,
-        'black':black,
-        'white':white,
-        'striped_orange':striped_orange,
-        'striped_blue':striped_blue,
-        'green':green
-    }
-    function = sock_dict.get(sock_list, lambda:"invalid")
-    running = False
-    function()
+        if sock_list == 'blue':
+            color_sorting(blue_sock,GUI_blue_list)
+        elif sock_list == 'black':
+            color_sorting(black_sock,GUI_black_list)
+        elif sock_list == 'white':
+            color_sorting(white_sock,GUI_white_list)
+        elif sock_list == 'orange':
+            color_sorting(orange_sock,GUI_orange_list)
+        elif sock_list == 'green':
+            color_sorting(green_sock,GUI_green_list)
+        elif sock_list == 'red':
+            color_sorting(red_sock,GUI_red_list)
+        elif sock_list == 'yellow':
+            color_sorting(yellow_sock,GUI_yellow_list)
+        elif sock_list == 'striped_blue':
+            color_sorting(striped_blue_sock,GUI_striped_blue_list)
+        elif sock_list == 'striped_orange':
+            color_sorting(striped_orange_sock,GUI_striped_orange_list)
+        else:
+            print("NO SOCK FOUND 404")
 
 #function that sorts the socks and displays them with their pair
 #this will change as they only are randomly placed on screen need to come up with a way to get it in order
